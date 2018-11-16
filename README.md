@@ -1,6 +1,6 @@
 # PP-f18_HW3
 
-Two little programs parallelized by OpenMP
+Two little programs parallelized by MPI
 
 - Programs:
   - **prime.c** : find largest prime smaller than input, and count the number of prime number smaller than it
