@@ -10,6 +10,9 @@ Two little programs parallelized by MPI
 
       mpicc -o prime prime.c -lm
       mpicc -o integrate integrate.c -lm
+  or
+
+      make [all|prime|integrate]
 
 - Run:
 
