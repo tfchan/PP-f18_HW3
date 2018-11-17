@@ -18,3 +18,6 @@ Two little programs parallelized by MPI
 
       mpiexec -n $N1 -hostfile hostfile ./prime $N2
       mpiexec -n $N1 -hostfile hostfile ./integrate $N2
+  or
+
+      ./run.sh [#process] <program> <program argument>
