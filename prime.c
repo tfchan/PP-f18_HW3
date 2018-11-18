@@ -34,6 +34,9 @@ int main(int argc, char *argv[]) {
     printf("Starting. Numbers to be scanned= %lld\n", limit);
     answer[0] = 4;  //Assume (2,3,5,7) are counted here
   }
+  else {
+    answer[0] = 0;
+  }
 
   step = 2 * numOfProcess;  // Calculate step for each process
   for (n = 11 + 2 * rank; n <= limit; n = n + step) {
