@@ -9,9 +9,7 @@ int main(int argc, char **argv) {
   double rect_width, area, sum, x_middle; 
   // variables for MPI
   int rank, numOfProcess;
-  int dest = 0;
-  int tag = 0;
-  double partialSum;
+  double sumLocal;
 
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Get rank of this process
@@ -21,25 +19,18 @@ int main(int argc, char **argv) {
 
   rect_width = PI / num_intervals;
 
-  partialSum = 0;
+  sumLocal = 0;
   for(i = 1 + rank; i < num_intervals + 1; i += numOfProcess) {
     /* find the middle of the interval on the X-axis. */ 
     x_middle = (i - 0.5) * rect_width;
     area = sin(x_middle) * rect_width; 
-    partialSum = partialSum + area;
+    sumLocal = sumLocal + area;
   }
 
-  if (rank == 0) {  // Conclude result from each slave
-    sum = partialSum;
-    for (int source = 1; source < numOfProcess; source++) {
-      MPI_Recv(&partialSum, 1, MPI_DOUBLE, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      sum += partialSum;  // Sum up all partial sum
-    }
+  // Conclude result from all process
+  MPI_Reduce(&sumLocal, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+  if (rank == 0)
     printf("The total area is: %f\n", (float)sum);
-  }
-  else {  // Send result to master
-    MPI_Send(&partialSum, 1, MPI_DOUBLE, dest, tag, MPI_COMM_WORLD);
-  }
   MPI_Finalize();
   return 0;
 }
