@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
   int rank, numOfProcess;
   int dest = 0;
   int tag = 0;
-  MPI_Status status;
   int step, pc, foundone;
 
   MPI_Init(&argc, &argv);
@@ -48,7 +47,7 @@ int main(int argc, char *argv[]) {
     pc = answer[0];
     foundone = answer[1];
     for (int source = 1; source < numOfProcess; source++) {
-      MPI_Recv(&answer, 2, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+      MPI_Recv(&answer, 2, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       pc += answer[0];  // Sum up all prime counter
       if (answer[1] > foundone) // Find maximum prime
         foundone = answer[1];

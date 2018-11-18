@@ -11,7 +11,6 @@ int main(int argc, char **argv) {
   int rank, numOfProcess;
   int dest = 0;
   int tag = 0;
-  MPI_Status status;
   double partialSum;
 
   MPI_Init(&argc, &argv);
@@ -33,7 +32,7 @@ int main(int argc, char **argv) {
   if (rank == 0) {  // Conclude result from each slave
     sum = partialSum;
     for (int source = 1; source < numOfProcess; source++) {
-      MPI_Recv(&partialSum, 1, MPI_DOUBLE, source, tag, MPI_COMM_WORLD, &status);
+      MPI_Recv(&partialSum, 1, MPI_DOUBLE, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       sum += partialSum;  // Sum up all partial sum
     }
     printf("The total area is: %f\n", (float)sum);
